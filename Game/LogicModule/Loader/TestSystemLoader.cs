@@ -22,7 +22,7 @@ namespace Game.LogicModule
 
         public override IEnumerator LoadBatch1()
         {
-            testSystem.info = info;
+            testSystem.info = info * 5;
             yield return new WaitForSeconds(1f);
         }  
     }

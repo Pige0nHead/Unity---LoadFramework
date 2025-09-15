@@ -24,7 +24,7 @@ namespace Game.Module2
         {
             Debug.Log($"Test2Loader LoadBatch2: info1={info1}, info2={info2}");
             // 初始化3个球体，位置依次递加
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < info1; i++)
             {
                 GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 sphere.transform.position = new Vector3(i, 0, 0); // 位置依次递加

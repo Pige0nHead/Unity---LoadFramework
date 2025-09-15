@@ -3,7 +3,6 @@ using LoadFramework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using Framework;
 
 
@@ -17,7 +16,7 @@ namespace Game.LogicModule
                     {
             get { return _info; }
             set {
-                TestSystemEvent.Trigger(value * 10);
+                TestSystemEvent.Trigger(value);
                 _info = value; }
         }
 

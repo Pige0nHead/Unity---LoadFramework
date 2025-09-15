@@ -1,8 +1,6 @@
 using Framework;
 using UnityEngine;
 
-
-
 namespace Game
 {
     /// <summary>

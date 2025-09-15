@@ -5,7 +5,7 @@ namespace Game.Module3
 
     public class Test3UnloadInfo : AbstractLoadInfo
     {
-        public override string moduleName { get; protected set; } = "Test3";
+        public override string moduleName => "Test3";
         public override Type LoaderType { get; set; } = typeof(Test3Unloader);
         public Test3UnloadInfo(int roundIndex)
         {

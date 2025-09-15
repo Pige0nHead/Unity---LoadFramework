@@ -9,7 +9,7 @@ namespace LoadFramework
     /// </summary>
     public class LoadingCommand : AbstractManagerCommand<LoadManager>
     {
-        private ILoadEventInfo loadEventInfo;
+        public ILoadEventInfo loadEventInfo;
         private LoadManager loaderManager;
         public LoadingCommand(ILoadEventInfo loadEventInfo)
         {
@@ -19,8 +19,10 @@ namespace LoadFramework
         public override void Execute()
         {
             loaderManager = GetManager();
+            loaderManager.AddLoadingCommand(this);
+            /*
             loaderManager.PrepareLoad(loadEventInfo);
-            LoadingEvent.Trigger(loadEventInfo);        
+            LoadingEvent.Trigger(loadEventInfo);*/
         }
     }
 

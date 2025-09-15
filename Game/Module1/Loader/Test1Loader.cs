@@ -29,12 +29,5 @@ namespace Game.Module1
             }
             yield return new WaitForSeconds(1f);
         }
-
-        public override IEnumerator LoadBatch2()
-        {
-            yield break;
-        }
-
-
     }
 }

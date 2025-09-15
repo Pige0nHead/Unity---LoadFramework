@@ -8,7 +8,7 @@ namespace Game.LogicModule
     /// </summary>
     public class TestSystemLoadInfo : AbstractLoadInfo
     {
-        public override string moduleName { get; protected set; } = "TestSystem";
+        public override string moduleName =>"TestSystem";
         public override Type LoaderType { get; set; } = typeof(TestSystemLoader);
 
         public int info;

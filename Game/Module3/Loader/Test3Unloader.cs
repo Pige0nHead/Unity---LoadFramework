@@ -18,13 +18,12 @@ namespace Game.Module3
 
         public override IEnumerator LoadBatch1()
         {
-            
             foreach (var go in test3Module.gameObjects)
             {
                 if (go != null)
                     GameObject.Destroy(go);
             }
-            //test3Module.gameObjects.Clear();*/
+            test3Module.gameObjects.Clear();
             yield return new WaitForSeconds(1f);
         }
 

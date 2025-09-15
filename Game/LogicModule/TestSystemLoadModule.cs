@@ -19,26 +19,5 @@ namespace Game.LogicModule {
         public void DebugSystemLoad(int info) { 
             Debug.Log("系统层已加载信息: "+info);
         }
-        /*
-        private TestSystemLoader testSystemLoader;
-        protected override void OnReceiptLoadInfo(ILoadEventInfo infos)
-        {
-            ILoadInfo info = infos.GetInfo("TestSystem");
-            if (info != null)
-            {
-                OnCreateLoader (info);
-            }
-        }
-
-        protected override void OnCreateLoader(ILoadInfo info)
-        {
-            if (testSystemLoader != null)
-            {
-                Destroy(testSystemLoader);
-            }
-            testSystemLoader = gameObject.AddComponent<TestSystemLoader>();
-            testSystemLoader.Init(info as TestSystemLoadInfo, testSystem);
-        }
-        */
     }
 }

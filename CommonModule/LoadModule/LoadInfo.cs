@@ -16,7 +16,7 @@ namespace LoadFramework {
     /// </summary>
     public abstract class AbstractLoadInfo : ILoadInfo
     {
-        public virtual string moduleName { get; protected set; }
+        public virtual string moduleName { get; }
 
         private int _LoadRoundIndex = 1;
         public int LoadRoundIndex
@@ -77,9 +77,15 @@ namespace LoadFramework {
         {
             EventType = "CommonLoadEvent";
         }
+        public CommonLoadEventInfo(string EventType)
+        {
+            this.EventType = EventType;
+        }
         public void AddInfo(ILoadInfo loadInfo)
         {
             LoadInfos.Add(loadInfo);
         }
     }
+
+
 }

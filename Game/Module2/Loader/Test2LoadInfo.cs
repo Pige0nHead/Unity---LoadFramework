@@ -4,7 +4,7 @@ namespace Game.Module2
 {
     public class Test2LoadInfo : AbstractLoadInfo
     {
-        public override string moduleName { get; protected set; } = "Test2";
+        public override string moduleName => "Test2";
         public override System.Type LoaderType { get; set; } = typeof(Test2Loader);
         public int info1;
         public int info2;

@@ -27,13 +27,13 @@ namespace TestScripts
         private void OnStartLoading()
         {
             Debug.Log("[Event] StartLoadingEvent triggered");
-            //ShowLoadingScreen();
+            ShowLoadingScreen();
         }
 
         private void OnLoadingCompleted()
         {
             Debug.Log("[Event] LoadingCompletedEvent triggered");
-            //HideLoadingScreen();
+            HideLoadingScreen();
         }
 
         private void OnCurrentLoadingStep(string step)
@@ -96,8 +96,21 @@ namespace TestScripts
                 Debug.Log("Click to Load Test1 Module");
                 isTest = !isTest;
                 CommonLoadEventInfo loadEventInfo = new LoadFramework.CommonLoadEventInfo();
-               /* Game.SceneModule.SceneLoadInfo sceneLoadInfo = new Game.SceneModule.SceneLoadInfo("TestScene",1);
-                loadEventInfo.AddInfo(sceneLoadInfo);*/
+                Game.Module1.Test1LoadInfo info = new Game.Module1.Test1LoadInfo(5, 1);
+                loadEventInfo.AddInfo(info);
+                Game.Module2.Test2LoadInfo info2 = new Game.Module2.Test2LoadInfo(3, 2, 1);
+                loadEventInfo.AddInfo(info2);
+                Game.Module3.Test3LoadInfo info3 = new Game.Module3.Test3LoadInfo(2);
+                loadEventInfo.AddInfo(info3);   
+
+                Game.LogicModule.TestSystemLoadInfo testSystemLoadInfo = new Game.LogicModule.TestSystemLoadInfo(10);
+                loadEventInfo.AddInfo(testSystemLoadInfo);
+                new LoadingCommand(loadEventInfo).Execute();
+                /* Game.SceneModule.SceneLoadInfo sceneLoadInfo = new Game.SceneModule.SceneLoadInfo("TestScene",1);
+                 loadEventInfo.AddInfo(sceneLoadInfo);*/
+                /*
+                Game.SceneModule.SceneLoadInfo sceneLoadInfo = new Game.SceneModule.SceneLoadInfo("TestScene2",1);
+                loadEventInfo.AddInfo(sceneLoadInfo);
 
                 Game.LogicModule.TestSystemLoadInfo infoSys = new Game.LogicModule.TestSystemLoadInfo(5);
                 loadEventInfo.AddInfo(infoSys);
@@ -108,8 +121,7 @@ namespace TestScripts
                 loadEventInfo.AddInfo(info2);
                 Game.Module3.Test3LoadInfo info3 = new Game.Module3.Test3LoadInfo(3);
                 loadEventInfo.AddInfo(info3);
-
-                new LoadingCommand(loadEventInfo).Execute();
+                */
             }
             
             if(Input.GetMouseButtonDown(1) && isTest2 == false && isTest == true)

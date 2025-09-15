@@ -18,7 +18,6 @@ namespace Game.Module3
 
         public override IEnumerator LoadBatch1()
         {
-            //Debug.Log($"Test3Loader LoadBatch3");
             foreach (GameObject obj in MonoSingleton<GameManager>.Instance.GetModule<Module2.Test2Module>().gameObjects)
             {
                 test3Module.gameObjects.Add(obj);

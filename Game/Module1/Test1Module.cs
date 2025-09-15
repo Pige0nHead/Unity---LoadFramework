@@ -8,7 +8,6 @@ namespace Game.Module1
     {
         public List<GameObject> gameObjects = new List<GameObject>();
 
-
         public override string moduleName => "Test1";
         public AbstractLoader loader;
         protected override void OnCreateLoader(ILoadInfo info)

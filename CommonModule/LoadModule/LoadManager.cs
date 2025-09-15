@@ -10,6 +10,42 @@ namespace LoadFramework
     {
         private List<ILoader> loaders = new List<ILoader>();
         private List<ILoadInfo> loadInfos = new List<ILoadInfo>();
+        private Queue<LoadingCommand> loadingCommands = new Queue<LoadingCommand>();
+        private bool isLoading = false;
+
+        void Awake()
+        {
+            StartLoadingEvent.Register(() => isLoading = true);
+            LoadingCompletedEvent.Register(() => isLoading = false);
+            LoadingCompletedEvent.Register(ExecuteNextCommand);
+        }
+
+        /// <summary>
+        /// 将加载命令填入队列，如果当前为空，则执行，否则要在另一个函数中，等待上一个加载完成的事件
+        /// </summary>
+        /// <param name="loadingCommand"></param>
+        public void AddLoadingCommand(LoadingCommand loadingCommand) { 
+            loadingCommands.Enqueue(loadingCommand);
+            ExecuteNextCommand();
+        }
+        /// <summary>
+        /// 执行下一个加载命令
+        /// </summary>
+        private void ExecuteNextCommand()
+        {
+            if (!isLoading && loadingCommands.Count > 0)
+            {
+                var command = loadingCommands.Dequeue();
+                PrepareLoad(command.loadEventInfo);
+                LoadingEvent.Trigger(command.loadEventInfo);
+                return;
+            }
+            if(isLoading) {
+                Debug.LogError("你在加载中触发了另一个加载，已阻塞在队列中等待加载完成。");
+            }
+        }
+
+
 
         /// <summary>
         /// 先接受LoadInfo，才能开始加载器
@@ -90,6 +126,9 @@ namespace LoadFramework
                 List<ILoader> currentRoundLoaders = new List<ILoader>();
                 foreach (var loader in loaders)
                 {
+                    if (loader.LoadRoundIndex < 1) { 
+                        loader.LoadRoundIndex = 1;
+                    }
                     if (loader.LoadRoundIndex == round)
                     {
                         currentRoundLoaders.Add(loader);
@@ -145,3 +184,8 @@ namespace LoadFramework
         }
     }
 }
+
+// 使用方法示例：
+// 添加命令：loadingCommands.Enqueue(command);
+// 取出命令：var cmd = loadingCommands.Dequeue();
+// 判断队列是否为空：loadingCommands.Count == 0

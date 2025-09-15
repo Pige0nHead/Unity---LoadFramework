@@ -1,4 +1,5 @@
 using Framework;
+using LoadFramework;
 using System.Collections;
 using System.Collections.Generic;
 using TestScripts;
@@ -13,7 +14,9 @@ namespace Game {
         {
             DontDestroyOnLoad(gameObject);
             InstantiateManager<LoadFramework.LoadManager>();
-            InstantiateManager<TestScripts.TestMono>();
+            //InstantiateManager<TestScripts.TestMono>();
+            InstantiateManager<LoadSoFileModule>();
+            InstantiateManager<TestSoLoad>();
             InstantiateManager<GameManager>();
         }
 
