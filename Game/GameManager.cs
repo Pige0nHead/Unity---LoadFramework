@@ -22,9 +22,9 @@ namespace Game
         private void RegisterModules()
         {
             RegisterModules<TestSystemLoadModule>();
-            RegisterModules<Module1.Test1Module>();
-            RegisterModules<Module2.Test2Module>();
-            RegisterModules<Module3.Test3Module>();
+            RegisterModules<Module1.CubeModule>();
+            RegisterModules<Module2.SphereModule>();
+            RegisterModules<Module3.ManagerSphereModule>();
             RegisterModules<SceneModule.SceneModule>();
         }
 

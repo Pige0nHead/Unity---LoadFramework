@@ -105,7 +105,6 @@ public class LoadWindow : EditorWindow
             constructorArgs = null;
         }
 
-        // 选择info类型
         var infos = moduleGroups[moduleNames[selectedModuleIndex]];
         string[] infoNames = infos.Select(t => t.Name).ToArray();
         int newTypeIndex = EditorGUILayout.Popup("选择Info类型", selectedTypeIndex, infoNames);
@@ -116,10 +115,8 @@ public class LoadWindow : EditorWindow
         }
         var selectedType = infos[selectedTypeIndex];
 
-        // 构造参数输入
         DrawConstructorInputs(selectedType);
 
-        // 新增：存储到列表按钮
         if (GUILayout.Button("存储到列表"))
         {
             var ctor = GetMainConstructor(selectedType);
@@ -149,7 +146,6 @@ public class LoadWindow : EditorWindow
                 parameters = paramList
             };
 
-            // 只用 moduleName 判断唯一性
             for (int i = 0; i < infoEntries.Count; i++)
             {
                 var existModuleName = infoEntries[i].moduleName;
@@ -218,26 +214,43 @@ public class LoadWindow : EditorWindow
         }
     }
 
+    private string GetSaveAssetPath()
+    {
+        if (!string.IsNullOrEmpty(soFileLoadPath))
+        {
+            return soFileLoadPath;
+        }
+        return $"{folderPath}/{soFileName}.asset";
+    }
+
     private void SaveInfosToSO()
     {
-        if (string.IsNullOrEmpty(folderPath))
+        if (string.IsNullOrEmpty(folderPath) && string.IsNullOrEmpty(soFileLoadPath))
         {
-            EditorUtility.DisplayDialog("提示", "请先选择存储路径！", "确定");
+            EditorUtility.DisplayDialog("提示", "请先选择存储路径或已加载SO文件！", "确定");
             return;
         }
-        if (string.IsNullOrEmpty(soFileName))
+        if (string.IsNullOrEmpty(soFileName) && string.IsNullOrEmpty(soFileLoadPath))
         {
-            EditorUtility.DisplayDialog("提示", "请输入SO文件名！", "确定");
+            EditorUtility.DisplayDialog("提示", "请输入SO文件名或已加载SO文件！", "确定");
             return;
         }
 
         var so = ScriptableObject.CreateInstance<LoadInfoListSO>();
         so.infos = new List<LoadInfoEntry>(infoEntries);
 
-        string assetPath = $"{folderPath}/{soFileName}.asset";
+        string assetPath = GetSaveAssetPath();
+        // 检查文件是否已存在，存在则先删除
+        if (AssetDatabase.LoadAssetAtPath<LoadInfoListSO>(assetPath) != null)
+        {
+            AssetDatabase.DeleteAsset(assetPath);
+            string dir = System.IO.Path.GetDirectoryName(soFileLoadPath).Replace("\\", "/");
+            assetPath = $"{dir}/{soFileName}.asset";
+        }
         AssetDatabase.CreateAsset(so, assetPath);
         AssetDatabase.SaveAssets();
         EditorUtility.DisplayDialog("保存成功", $"已保存到：{assetPath}", "确定");
+        soFileLoadPath = "";
     }
 
     private void DrawSOFileLoadButton()
@@ -249,7 +262,6 @@ public class LoadWindow : EditorWindow
             string selected = EditorUtility.OpenFilePanel("选择加载信息集合文件", "Assets/LoadConfig", "asset");
             if (!string.IsNullOrEmpty(selected))
             {
-                // 转换为Unity资源路径
                 int assetsIndex = selected.IndexOf("Assets", StringComparison.OrdinalIgnoreCase);
                 if (assetsIndex >= 0)
                 {
@@ -272,7 +284,6 @@ public class LoadWindow : EditorWindow
         if (so != null && so.infos != null)
         {
             infoEntries = new List<LoadInfoEntry>(so.infos);
-            // 直接刷新界面，无需反射生成对象列表
             string fileName = System.IO.Path.GetFileNameWithoutExtension(assetPath);
             soFileName = fileName;
             EditorUtility.DisplayDialog("读取成功", $"已从SO文件加载 {infoEntries.Count} 条数据。", "确定");
@@ -293,7 +304,7 @@ public class LoadWindow : EditorWindow
         var dict = new Dictionary<string, List<Type>>();
         foreach (var t in types)
         {
-            string moduleName = t.Name; // 默认用类型名
+            string moduleName = t.Name;
 
             var ctor = GetMainConstructor(t);
             if (ctor != null)
@@ -303,6 +314,19 @@ public class LoadWindow : EditorWindow
                         p.ParameterType == typeof(int) ? (object)0 :
                         p.ParameterType == typeof(float) ? (object)0f :
                         p.ParameterType == typeof(string) ? (object)"" :
+                        p.ParameterType == typeof(bool) ? (object)false :
+                        p.ParameterType == typeof(double) ? (object)0.0 :
+                        p.ParameterType == typeof(long) ? (object)0L :
+                        p.ParameterType == typeof(short) ? (object)(short)0 :
+                        p.ParameterType == typeof(byte) ? (object)(byte)0 :
+                        p.ParameterType == typeof(char) ? (object)'\0' :
+                        p.ParameterType == typeof(Vector2) ? (object)Vector2.zero :
+                        p.ParameterType == typeof(Vector3) ? (object)Vector3.zero :
+                        p.ParameterType == typeof(Vector4) ? (object)Vector4.zero :
+                        p.ParameterType == typeof(Color) ? (object)Color.white :
+                        p.ParameterType == typeof(Color32) ? (object)(Color32)Color.white :
+                        p.ParameterType == typeof(Quaternion) ? (object)Quaternion.identity :
+                        p.ParameterType == typeof(Rect) ? (object)Rect.zero :
                         null
                 ).ToArray();
 
@@ -319,7 +343,6 @@ public class LoadWindow : EditorWindow
                 }
                 catch
                 {
-                    // 实例化失败则用类型名分组
                 }
             }
 
@@ -356,6 +379,28 @@ public class LoadWindow : EditorWindow
                 constructorArgs[i] = EditorGUILayout.IntField(param.Name, constructorArgs[i] is int v ? v : 0);
             else if (param.ParameterType == typeof(float))
                 constructorArgs[i] = EditorGUILayout.FloatField(param.Name, constructorArgs[i] is float f ? f : 0f);
+            else if (param.ParameterType == typeof(bool))
+                constructorArgs[i] = EditorGUILayout.Toggle(param.Name, constructorArgs[i] is bool b ? b : false);
+            else if (param.ParameterType == typeof(double))
+                constructorArgs[i] = EditorGUILayout.DoubleField(param.Name, constructorArgs[i] is double d ? d : 0.0);
+            else if (param.ParameterType == typeof(long))
+                constructorArgs[i] = EditorGUILayout.LongField(param.Name, constructorArgs[i] is long l ? l : 0L);
+            else if (param.ParameterType == typeof(short))
+                constructorArgs[i] = EditorGUILayout.IntField(param.Name, constructorArgs[i] is short s ? s : 0);
+            else if (param.ParameterType == typeof(byte))
+                constructorArgs[i] = EditorGUILayout.IntField(param.Name, constructorArgs[i] is byte by ? by : 0);
+            else if (param.ParameterType == typeof(char))
+                constructorArgs[i] = EditorGUILayout.TextField(param.Name, constructorArgs[i] is char c ? c.ToString() : "").FirstOrDefault();
+            else if (param.ParameterType == typeof(Vector2))
+                constructorArgs[i] = EditorGUILayout.Vector2Field(param.Name, constructorArgs[i] is Vector2 v2 ? v2 : Vector2.zero);
+            else if (param.ParameterType == typeof(Vector3))
+                constructorArgs[i] = EditorGUILayout.Vector3Field(param.Name, constructorArgs[i] is Vector3 v3 ? v3 : Vector3.zero);
+            else if (param.ParameterType == typeof(Vector4))
+                constructorArgs[i] = EditorGUILayout.Vector4Field(param.Name, constructorArgs[i] is Vector4 v4 ? v4 : Vector4.zero);
+            else if (param.ParameterType == typeof(Color))
+                constructorArgs[i] = EditorGUILayout.ColorField(param.Name, constructorArgs[i] is Color col ? col : Color.white);
+            else if (param.ParameterType == typeof(Color32))
+                constructorArgs[i] = (Color32)EditorGUILayout.ColorField(param.Name, constructorArgs[i] is Color32 col32 ? (Color)col32 : Color.white);
             else
                 EditorGUILayout.LabelField(param.Name + "（暂不支持该类型）");
         }

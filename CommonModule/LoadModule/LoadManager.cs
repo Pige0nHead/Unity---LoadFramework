@@ -24,7 +24,7 @@ namespace LoadFramework
         /// 将加载命令填入队列，如果当前为空，则执行，否则要在另一个函数中，等待上一个加载完成的事件
         /// </summary>
         /// <param name="loadingCommand"></param>
-        public void AddLoadingCommand(LoadingCommand loadingCommand) { 
+        public void AddLoadingCommand(LoadingCommand loadingCommand) {
             loadingCommands.Enqueue(loadingCommand);
             ExecuteNextCommand();
         }

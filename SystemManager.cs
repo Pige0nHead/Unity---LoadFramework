@@ -14,9 +14,9 @@ namespace Game {
         {
             DontDestroyOnLoad(gameObject);
             InstantiateManager<LoadFramework.LoadManager>();
-            //InstantiateManager<TestScripts.TestMono>();
+            InstantiateManager<TestScripts.TestMono>();
             InstantiateManager<LoadSoFileModule>();
-            InstantiateManager<TestSoLoad>();
+            //InstantiateManager<TestSoLoad>();
             InstantiateManager<GameManager>();
         }
 

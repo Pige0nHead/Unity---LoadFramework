@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Game.Module1
 {
-    public class Test1Module : AbstractGameMonoModule
+    public class CubeModule : AbstractGameMonoModule
     {
         public List<GameObject> gameObjects = new List<GameObject>();
 
-        public override string moduleName => "Test1";
+        public override string moduleName => "Cube";
         public AbstractLoader loader;
         protected override void OnCreateLoader(ILoadInfo info)
         {   
@@ -16,9 +16,9 @@ namespace Game.Module1
             {
                 Destroy(loader);
             }
-            Test1LoadInfo loadInfo = info as Test1LoadInfo;
-            loader = gameObject.AddComponent<Test1Loader>();
-            Test1Loader l = loader as Test1Loader;
+            CubeLoadInfo loadInfo = info as CubeLoadInfo;
+            loader = gameObject.AddComponent<CubeLoader>();
+            CubeLoader l = loader as CubeLoader;
             l.Init(loadInfo, this);
         }
 

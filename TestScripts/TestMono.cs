@@ -87,6 +87,7 @@ namespace TestScripts
 
         void Update()
         {
+            /*
             if (loadingIconRect != null)
             {
                 loadingIconRect.Rotate(Vector3.forward, -180 * Time.deltaTime);
@@ -96,43 +97,20 @@ namespace TestScripts
                 Debug.Log("Click to Load Test1 Module");
                 isTest = !isTest;
                 CommonLoadEventInfo loadEventInfo = new LoadFramework.CommonLoadEventInfo();
-                Game.Module1.Test1LoadInfo info = new Game.Module1.Test1LoadInfo(5, 1);
+                Game.Module1.CubeLoadInfo info = new Game.Module1.CubeLoadInfo(5, 1);
                 loadEventInfo.AddInfo(info);
-                Game.Module2.Test2LoadInfo info2 = new Game.Module2.Test2LoadInfo(3, 2, 1);
-                loadEventInfo.AddInfo(info2);
-                Game.Module3.Test3LoadInfo info3 = new Game.Module3.Test3LoadInfo(2);
-                loadEventInfo.AddInfo(info3);   
-
-                Game.LogicModule.TestSystemLoadInfo testSystemLoadInfo = new Game.LogicModule.TestSystemLoadInfo(10);
-                loadEventInfo.AddInfo(testSystemLoadInfo);
                 new LoadingCommand(loadEventInfo).Execute();
-                /* Game.SceneModule.SceneLoadInfo sceneLoadInfo = new Game.SceneModule.SceneLoadInfo("TestScene",1);
-                 loadEventInfo.AddInfo(sceneLoadInfo);*/
-                /*
-                Game.SceneModule.SceneLoadInfo sceneLoadInfo = new Game.SceneModule.SceneLoadInfo("TestScene2",1);
-                loadEventInfo.AddInfo(sceneLoadInfo);
-
-                Game.LogicModule.TestSystemLoadInfo infoSys = new Game.LogicModule.TestSystemLoadInfo(5);
-                loadEventInfo.AddInfo(infoSys);
-
-                Game.Module1.Test1LoadInfo info = new Game.Module1.Test1LoadInfo(10, 2);
-                loadEventInfo.AddInfo(info);
-                Game.Module2.Test2LoadInfo info2 = new Game.Module2.Test2LoadInfo(1, 1, 2);
-                loadEventInfo.AddInfo(info2);
-                Game.Module3.Test3LoadInfo info3 = new Game.Module3.Test3LoadInfo(3);
-                loadEventInfo.AddInfo(info3);
-                */
             }
             
             if(Input.GetMouseButtonDown(1) && isTest2 == false && isTest == true)
             {
                 Debug.Log("Click to Unload Test3 Module");
                 isTest2 = !isTest2;
-                Game.Module3.Test3UnloadInfo info = new Game.Module3.Test3UnloadInfo(1);
+                Game.Module3.ManagerSphereUnloadInfo info = new Game.Module3.ManagerSphereUnloadInfo(1);
                 CommonLoadEventInfo loadEventInfo3 = new LoadFramework.CommonLoadEventInfo();
                 loadEventInfo3.AddInfo(info);
                 new LoadingCommand(loadEventInfo3).Execute();
-            }
+            }*/
         }
     }
 }

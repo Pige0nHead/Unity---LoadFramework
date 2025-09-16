@@ -6,16 +6,16 @@ using UnityEngine;
 
 namespace Game.Module1
 {
-    public class Test1Loader : AbstractLoader
+    public class CubeLoader : AbstractLoader
     {
-        private Test1LoadInfo info;
+        private CubeLoadInfo info;
 
-        private Test1Module test1Module;
+        private CubeModule cubeModule;
 
-        public void Init(Test1LoadInfo info, Test1Module test1Module) {
+        public void Init(CubeLoadInfo info, CubeModule CubeModule) {
             this.info = info;
             this.LoadRoundIndex = info.LoadRoundIndex;
-            this.test1Module = test1Module;
+            this.cubeModule = CubeModule;
             SendingLoader();
         }
 
@@ -24,7 +24,7 @@ namespace Game.Module1
             for (int i = 0; i < info.info1; i++)
             {
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                test1Module.gameObjects.Add(cube);
+                cubeModule.gameObjects.Add(cube);
                 yield return new WaitForSeconds(0.5f);
             }
             yield return new WaitForSeconds(1f);

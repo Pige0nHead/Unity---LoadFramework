@@ -7,30 +7,32 @@ using UnityEngine;
 
 namespace Game.Module3
 {
-    public class Test3Loader : AbstractLoader
+    public class ManagerSphereLoader : AbstractLoader
     {
-        private Test3Module test3Module;
-        public void Init(Test3LoadInfo test3LoadInfo, Test3Module test3Module) { 
-            this.LoadRoundIndex = test3LoadInfo.LoadRoundIndex;
-            this.test3Module = test3Module;
+        private ManagerSphereModule mcsModule;
+        private Color color;
+        public void Init(ManagerSphereLoadInfo mcsLoadInfo, ManagerSphereModule mcsModule) { 
+            this.LoadRoundIndex = mcsLoadInfo.LoadRoundIndex;
+            this.color = mcsLoadInfo.color;
+            this.mcsModule = mcsModule;
             SendingLoader();
         }
 
         public override IEnumerator LoadBatch1()
         {
-            foreach (GameObject obj in MonoSingleton<GameManager>.Instance.GetModule<Module2.Test2Module>().gameObjects)
+            foreach (GameObject obj in MonoSingleton<GameManager>.Instance.GetModule<Module2.SphereModule>().gameObjects)
             {
-                test3Module.gameObjects.Add(obj);
+                mcsModule.gameObjects.Add(obj);
                 // ÇÐ»»ÑÕÉ«ÎªºìÉ«
                 var renderer = obj.GetComponent<Renderer>();
                 if (renderer != null)
                 {
-                    renderer.material.color = Color.red;
+                    renderer.material.color = color;
                 }
                 var image = obj.GetComponent<UnityEngine.UI.Image>();
                 if (image != null)
                 {
-                    image.color = Color.red;
+                    image.color = color;
                 }
             }
             yield return new WaitForSeconds(1f);

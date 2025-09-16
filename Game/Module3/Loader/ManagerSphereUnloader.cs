@@ -6,24 +6,24 @@ using UnityEngine;
 
 namespace Game.Module3
 {
-    public class Test3Unloader : AbstractLoader
+    public class ManagerSphereUnloader : AbstractLoader
     {
-        private Test3Module test3Module;
-        public void Init(Test3UnloadInfo test3LoadInfo, Test3Module test3Module)
+        private ManagerSphereModule mcsModule;
+        public void Init(ManagerSphereUnloadInfo mcsLoadInfo, ManagerSphereModule mcsModule)
         {
-            this.LoadRoundIndex = test3LoadInfo.LoadRoundIndex;
-            this.test3Module = test3Module;
+            this.LoadRoundIndex = mcsLoadInfo.LoadRoundIndex;
+            this.mcsModule = mcsModule;
             SendingLoader();
         }
 
         public override IEnumerator LoadBatch1()
         {
-            foreach (var go in test3Module.gameObjects)
+            foreach (var go in mcsModule.gameObjects)
             {
                 if (go != null)
                     GameObject.Destroy(go);
             }
-            test3Module.gameObjects.Clear();
+            mcsModule.gameObjects.Clear();
             yield return new WaitForSeconds(1f);
         }
 
